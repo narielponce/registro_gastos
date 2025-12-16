@@ -1,26 +1,79 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Registro de Gastos</title>
-<style>
-  body { font-family: Arial, sans-serif; margin: 40px; background: #f8f9fa; color: #333; }
-  h2 { color: #2c3e50; }
-  form { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); width: 320px; }
-  label { display: block; margin-top: 10px; font-weight: bold; }
-  input, select, button { width: 100%; padding: 8px; margin-top: 5px; border-radius: 4px; border: 1px solid #ccc; font-size: 14px; }
-  button { background: #27ae60; color: #fff; border: none; cursor: pointer; margin-top: 15px; }
-  button:hover { background: #219150; }
-  #msg { margin-top: 15px; font-weight: bold; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro de Gastos</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background: #f8f9fa;
+      color: #333;
+    }
+
+    h2 {
+      color: #2c3e50;
+    }
+
+    form {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 320px;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    input,
+    select,
+    button {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    button {
+      background: #27ae60;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+
+    button:hover {
+      background: #219150;
+    }
+
+    #msg {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+  </style>
 </head>
+
 <body>
   <h2>Registrar Gasto</h2>
 
   <form id="gastoForm">
     <label for="fecha">Fecha:</label>
     <input type="date" id="fecha" name="fecha" required>
+
+    <label for="tipo">Tipo de movimiento:</label>
+    <select id="tipo" name="tipo" required>
+      <option value="">Seleccionar...</option>
+      <option value="ingreso">Ingreso (+)</option>
+      <option value="gasto">Gasto (-)</option>
+    </select>
 
     <label for="categoria">Categoría:</label>
     <select id="categoria" name="categoria" required>
@@ -44,34 +97,35 @@
 
   <p id="msg"></p>
 
-<script>
-// URL del webhook de n8n
-const WEBHOOK_URL = "https://n8n.tufiestaonline.com.ar/webhook-test/registro_gastos"; // 👈 reemplazá esta URL
+  <script>
+    // URL del webhook de n8n
+    const WEBHOOK_URL = "https://n8n.tufiestaonline.com.ar/webhook-test/registro_gastos"; // 👈 reemplazá esta URL
 
-document.getElementById("gastoForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const data = Object.fromEntries(new FormData(e.target).entries());
+    document.getElementById("gastoForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(e.target).entries());
 
-  try {
-    const res = await fetch(WEBHOOK_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data)
+      try {
+        const res = await fetch(WEBHOOK_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+
+        if (res.ok) {
+          document.getElementById("msg").innerText = "✅ Gasto registrado correctamente";
+          document.getElementById("msg").style.color = "green";
+          e.target.reset();
+        } else {
+          document.getElementById("msg").innerText = "❌ Error al enviar el gasto";
+          document.getElementById("msg").style.color = "red";
+        }
+      } catch (error) {
+        document.getElementById("msg").innerText = "⚠️ No se pudo conectar con el servidor";
+        document.getElementById("msg").style.color = "orange";
+      }
     });
-
-    if (res.ok) {
-      document.getElementById("msg").innerText = "✅ Gasto registrado correctamente";
-      document.getElementById("msg").style.color = "green";
-      e.target.reset();
-    } else {
-      document.getElementById("msg").innerText = "❌ Error al enviar el gasto";
-      document.getElementById("msg").style.color = "red";
-    }
-  } catch (error) {
-    document.getElementById("msg").innerText = "⚠️ No se pudo conectar con el servidor";
-    document.getElementById("msg").style.color = "orange";
-  }
-});
-</script>
+  </script>
 </body>
+
 </html>

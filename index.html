@@ -101,8 +101,8 @@
       <option value="">Seleccionar...</option>
       <option value="Efectivo">💵 Efectivo</option>
       <option value="Debito">🏦 Débito</option>
-      <option value="Visa Credito">💳 Visa Credito</option>
-      <option value="Amex Credito">💳 Amex Credito</option>
+      <option value="Visa Crédito">💳 Visa Crédito</option>
+      <option value="Amex Crédito">💳 Amex Crédito</option>
     </select>
 
     <div id="cuotas-group" style="display: none;">
@@ -131,7 +131,7 @@
         const cuotasGroup = document.getElementById('cuotas-group');
         const cuotasInput = document.getElementById('cuotas');
         
-        if (this.value.includes('Credito')) {
+        if (this.value.includes('Crédito')) {
             cuotasGroup.style.display = 'block'; // Muestra el campo
             cuotasInput.setAttribute('required', 'required');
             cuotasInput.value = 1; // Valor por defecto
